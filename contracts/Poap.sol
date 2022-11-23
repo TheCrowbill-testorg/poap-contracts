@@ -1,4 +1,5 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.0;
+
 
 import "zos-lib/contracts/Initializable.sol";
 import "openzeppelin-eth/contracts/token/ERC721/ERC721.sol";
@@ -6,7 +7,6 @@ import "openzeppelin-eth/contracts/token/ERC721/ERC721Enumerable.sol";
 import "openzeppelin-eth/contracts/token/ERC721/IERC721Metadata.sol";
 import "./PoapRoles.sol";
 import "./PoapPausable.sol";
-
 
 // Desired Features
 // - Add Event
@@ -17,7 +17,7 @@ import "./PoapPausable.sol";
 // - Pause contract (only admin)
 // - ERC721 full interface (base, metadata, enumerable)
 
-contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausable {
+contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausable {;
     event EventToken(uint256 eventId, uint256 tokenId);
 
     // Token name
@@ -36,7 +36,7 @@ contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausabl
     mapping(uint256 => uint256) private _tokenEvent;
 
 
-    bytes4 private constant _INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
+    bytes4 private constant INTERFACE_ID_ERC721_METADATA = 0x5b5e139f;
 
     /**
      * @dev Gets the token name
@@ -54,6 +54,15 @@ contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausabl
         return _symbol;
     }
 
+    /**
+     * @dev Gets the token uri
+     * @return string representing the token uri
+     */
+    function tokenURI(uint256 tokenId) external view returns (string memory) {
+        uint eventId = _tokenEvent[tokenId];
+        return _strConcat(_baseURI, _uint2str(eventId), "/", _uint2str(tokenId), "");
+    }
+
     function tokenEvent(uint256 tokenId) public view returns (uint256) {
         return _tokenEvent[tokenId];
     }
@@ -64,18 +73,11 @@ contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausabl
      * @param index uint256 representing the index to be accessed of the requested tokens list
      * @return uint256 token ID at the given index of the tokens list owned by the requested address
      */
-    function tokenDetailsOfOwnerByIndex(address owner, uint256 index) public view returns (uint256 tokenId, uint256 eventId) {
+    function tokenDetailsOfOwnerByIndex(address owner, uint256 index) public view returns (
+        uint256 tokenId,
+        uint256 eventId) {
         tokenId = tokenOfOwnerByIndex(owner, index);
         eventId = tokenEvent(tokenId);
-    }
-
-    /**
-     * @dev Gets the token uri
-     * @return string representing the token uri
-     */
-    function tokenURI(uint256 tokenId) external view returns (string memory) {
-        uint eventId = _tokenEvent[tokenId];
-        return _strConcat(_baseURI, _uint2str(eventId), "/", _uint2str(tokenId), "");
     }
 
     function setBaseURI(string memory baseURI) public onlyAdmin whenNotPaused {
@@ -119,16 +121,15 @@ contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausabl
     {
         return _mintToken(eventId, tokenId, to);
     }
-
-
     /**
      * @dev Function to mint tokens
      * @param eventId EventId for the new token
      * @param to The address that will receive the minted tokens.
      * @return A boolean that indicates if the operation was successful.
      */
+
     function mintEventToManyUsers(uint256 eventId, address[] memory to)
-    public whenNotPaused onlyEventMinter(eventId) returns (bool)
+        public whenNotPaused onlyEventMinter(eventId) returns (bool)
     {
         for (uint256 i = 0; i < to.length; ++i) {
             _mintToken(eventId, lastId + 1 + i, to[i]);
@@ -183,6 +184,10 @@ contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausabl
         _registerInterface(_INTERFACE_ID_ERC721_METADATA);
     }
 
+    function removeAdmin(address account) public onlyAdmin {
+        _removeAdmin(account);
+    }
+
     /**
      * @dev Internal function to burn a specific token
      * Reverts if the token does not exist
@@ -207,7 +212,8 @@ contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausabl
         // TODO Verify that the token receiver ('to') do not have already a token for the event ('eventId')
         _mint(to, tokenId);
         _tokenEvent[tokenId] = eventId;
-        emit EventToken(eventId, tokenId);
+        emit //eventToken
+        (eventId, tokenId);
         return true;
     }
 
@@ -268,8 +274,5 @@ contract Poap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausabl
         return string(babcde);
     }
 
-    function removeAdmin(address account) public onlyAdmin {
-        _removeAdmin(account);
-    }
 
 }
