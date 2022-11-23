@@ -1,4 +1,4 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.0;
 
 import "zos-lib/contracts/Initializable.sol";
 import "./PoapRoles.sol";
@@ -7,6 +7,7 @@ import "./PoapRoles.sol";
  * @title Pausable
  * @dev Base contract which allows children to implement an emergency stop mechanism.
  */
+
 contract PoapPausable is Initializable, PoapRoles {
     event Paused(address account);
     event Unpaused(address account);
@@ -45,7 +46,8 @@ contract PoapPausable is Initializable, PoapRoles {
      */
     function pause() public onlyAdmin whenNotPaused {
         _paused = true;
-        emit Paused(msg.sender);
+        emit Paused
+        (msg.sender);
     }
 
     /**
@@ -53,7 +55,8 @@ contract PoapPausable is Initializable, PoapRoles {
      */
     function unpause() public onlyAdmin whenPaused {
         _paused = false;
-        emit Unpaused(msg.sender);
+        emit Unpaused
+        (msg.sender);
     }
 
     // For future extensions
