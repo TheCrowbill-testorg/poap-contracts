@@ -1,7 +1,8 @@
-pragma solidity ^0.5.0;
+pragma solidity 0.5.0;
 
 import "zos-lib/contracts/Initializable.sol";
 import "openzeppelin-eth/contracts/access/Roles.sol";
+
 
 contract PoapRoles is Initializable {
     using Roles for Roles.Role;
@@ -54,28 +55,31 @@ contract PoapRoles is Initializable {
         _removeAdmin(msg.sender);
     }
 
-    function removeEventMinter(uint256 eventId, address account) public onlyAdmin {
+    function removeEventMinter(uint256 eventId, address account) public onlyAdmin
+    {
         _removeEventMinter(eventId, account);
-    }
+        }
 
-    function _addEventMinter(uint256 eventId, address account) internal {
+    function _addEventMinter(uint256 eventId, address account) internal
+    {
         _minters[eventId].add(account);
-        emit EventMinterAdded(eventId, account);
-    }
+        emit eventMinterAdded(eventId, account);
+        }
 
-    function _addAdmin(address account) internal {
+    function _addAdmin(address account) internal
+    {
         _admins.add(account);
-        emit AdminAdded(account);
-    }
+        emit adminAdded(account);
+        }
 
     function _removeEventMinter(uint256 eventId, address account) internal {
         _minters[eventId].remove(account);
-        emit EventMinterRemoved(eventId, account);
+        emit eventMinterRemoved(eventId, account);
     }
 
     function _removeAdmin(address account) internal {
         _admins.remove(account);
-        emit AdminRemoved(account);
+        emit adminRemoved(account);
     }
 
     // For future extensions
