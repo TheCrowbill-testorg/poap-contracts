@@ -46,7 +46,7 @@ contract PoapPausable is Initializable, PoapRoles {
      */
     function pause() public onlyAdmin whenNotPaused {
         _paused = true;
-        emit Paused
+        emit paused
         (msg.sender);
     }
 
@@ -55,7 +55,7 @@ contract PoapPausable is Initializable, PoapRoles {
      */
     function unpause() public onlyAdmin whenPaused {
         _paused = false;
-        emit Unpaused
+        emit unpaused
         (msg.sender);
     }
 
