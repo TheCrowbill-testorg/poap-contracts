@@ -195,13 +195,14 @@ contract XPoap is Initializable, ERC721, ERC721Enumerable, PoapRoles, PoapPausab
      * @param to The address that will receive the minted tokens.
      * @return A boolean that indicates if the operation was successful.
      */
-    function _mintToken(uint256 eventId, uint256 tokenId, address to) internal returns (bool) {
+    function _mintToken(uint256 eventId, uint256 tokenId, address to) internal returns (bool)
+        {
         // TODO Verify that the token receiver ('to') do not have already a token for the event ('eventId')
-        _mint(to, tokenId);
-        _tokenEvent[tokenId] = eventId;
-        emit eventToken(eventId, tokenId);
-        return true;
-    }
+            _mint(to, tokenId);
+            _tokenEvent[tokenId] = eventId;
+            emit _tokenEvent(eventId,tokenId)
+            return true;
+        }
 
     /**
      * @dev Function to convert uint to string

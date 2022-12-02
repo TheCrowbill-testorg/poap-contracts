@@ -55,26 +55,23 @@ contract PoapRoles is Initializable {
         _removeAdmin(msg.sender);
     }
 
-    function removeEventMinter(uint256 eventId, address account) public onlyAdmin
-    {
+    function _removeEventMinter(uint256 eventId, address account) public onlyAdmin {
         _removeEventMinter(eventId, account);
-        }
+    }
 
-    function _addEventMinter(uint256 eventId, address account) internal
-    {
+    function _addEventMinter(uint256 eventId, address account) internal {
         _minters[eventId].add(account);
-        emit eventMinterAdded(eventId, account);
-        }
+        emit _addEventMinter(eventId, account);
+    }
 
-    function _addAdmin(address account) internal
-    {
-        _admins.add(account);
-        emit adminAdded(account);
-        }
+    function _addAdmin(address account) internal {
+        _adminsAdd(account);
+        emit _addAdmin(account);
+    }
 
     function _removeEventMinter(uint256 eventId, address account) internal {
         _minters[eventId].remove(account);
-        emit eventMinterRemoved(eventId, account);
+        emit _removeEventMinter(eventId, account);
     }
 
     function _removeAdmin(address account) internal {
