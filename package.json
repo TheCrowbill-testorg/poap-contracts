@@ -1,7 +1,7 @@
 {
-  "name": "poap-contracts",
-  "version": "1.0.0",
-  "description": "",
+  "name": "poap-contracts-etc",
+  "version": "0.0.1dev",
+  "description": "Proof of Attendance/Authorization for ETC network WIP",
   "main": "index.js",
   "scripts": {
     "test": "truffle test",
